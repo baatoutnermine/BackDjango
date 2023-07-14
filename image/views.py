@@ -46,3 +46,17 @@ class tagsSearch(generics.ListAPIView):
     serializer_class = ImageSerializer
     filter_backends =[ filters.SearchFilter]
     search_fields=['tags']
+
+
+#delete image 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def DeleteImage(request, pk):
+    try:
+        image = Image.objects.get(id=pk)
+        serializer = ImageSerializer(image)
+        image.delete()
+        return Response("image deleted")
+    except Image.DoesNotExist:
+        return Response({'error': 'Image not found'}, status=404)
+
